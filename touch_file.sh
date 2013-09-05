@@ -7,7 +7,7 @@ FILE_LIST="./list.log"
 
 Checker="/usr/bin/md5sum"
 
-
+#確認使用有沒有FILE LIST
 [ ! -f $FILE_LIST ] && echo "No search $FILE_LIST" && exit 2
 
 
