@@ -3,6 +3,8 @@
 
 tmpFile=$(mktemp)
 
+[ ! -d /data/log/ ] && mkdir /data/log
+
 for_dir_list(){
   local _dir=$1
   
@@ -30,6 +32,6 @@ else
   exit 
 fi
 
-cp $tmpFile ./list.log
+cp $tmpFile /data/log/list.log
 
 rm $tmpFile
