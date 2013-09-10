@@ -1,0 +1,61 @@
+#!/bin/bash
+
+
+SCAN_Dir="$1"
+file_LOG="../list.log"
+file_MD5_Old="../list.md5.old"
+file_MD5_New="../list.md5.New"
+CHECK_STATUS="../FILE_S.LOG"
+
+
+[ -z $SCAN_Dir ] && echo "Using : $0 Dir_Name" && exit 2
+
+#Establish file log
+FILE_LIST(){
+  ./file_list $SCAN_Dir $file_LOG
+}
+
+#Establish check file "log.md5"
+MD5_FILE(){
+  Checker="/usr/bin/md5sum"
+  for File in $(cat $file_LOG)
+  do
+    if [ -a $File ];then
+      $Checker "$File"  >> ./$file_MD5_New
+    else
+      echo "$File" >> ./$file_MD5_New
+    fi
+  done
+
+}
+
+
+#two file is md5 check ,if two file not the same
+CHECK_MD5(){
+  if [ ! -f $file_MD5_Old ];then
+    
+    #no search "list.md5.New" exe MD5_file
+    if [ ! -f $file_MD5_New ];then
+      #echo "NO?"
+      MD5_FILE
+      exit
+    fi
+  else  
+      mv $file_MD5_New $file_MD5_Old
+      #echo "mv OK"
+      MD5_FILE
+
+  fi  
+   
+  #diff two file md5
+  diff -u $file_MD5_New $file_MD5_Old
+  #echo "diff OK"
+    
+
+}
+
+########  MAIN  ###########
+FILE_LIST
+#echo "list OK"
+CHECK_MD5
+#echo "check OK"
