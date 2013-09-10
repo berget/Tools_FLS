@@ -10,5 +10,6 @@ add md5sum
 
 
 =====version 0.3=====
+\n
 set up auto_list_md5
 
