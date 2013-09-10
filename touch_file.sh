@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-FILE_LIST="./list.log"
+FILE_LIST="/data/log/list.log"
 
 # file Checker
 
@@ -21,19 +21,12 @@ mk_Fmd5(){
   
   local x="$1"
   $Checker $x
-#  for x in $(cat $FILE_LIST)
-#  do
-    
-#  done
 }
 
 on_CH_Fmd5(){
   local oc5="$1"
 
-#  for Xoc5 in $(cat $oc5)
-#  do
     $Checker -c $oc5
-#  done
 }
 
 CHECK_FILE(){

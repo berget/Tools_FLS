@@ -3,26 +3,24 @@
 
 tmpFile=$(mktemp)
 
-[ ! -d /data/log/ ] && mkdir /data/log
+#[ ! -d /data/log/ ] && mkdir /data/log
 
 for_dir_list(){
   local _dir=$1
-  
+  #list dir is are file write in log, if judge are dir ,reload function 
   for x in $(ls $_dir)
   do
     if [ ! -d $_dir$x ];then
       echo $_dir$x >> $tmpFile
-
     else
-
       echo "==============$_dir$x===================" >> $tmpFile
       for_dir_list $_dir$x/
     fi
   done
-
-
 }
 
+
+# Rand $1 if not, judge exit   
 [ -z $1 ] && rm $tmpFile && echo "Using : $0 Dir_Name" && exit 2
 if [ -d $1 ];then
   
@@ -32,6 +30,7 @@ else
   exit 
 fi
 
-cp $tmpFile /data/log/list.log
+#cp $tmpFile /data/log/list.log
+cp $tmpFile $2
 
 rm $tmpFile
