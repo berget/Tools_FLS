@@ -1,0 +1,37 @@
+#!/bin/bash
+
+SCAN_Dir="$1"
+DATE=$(date +%y%m%d_%H%M)
+S_D='/tmp'
+file_LOG="$S_D/list.log"
+
+file_time_New="$S_D/list.time.$DATE"
+CHECK_STATUS="$S_D/FILE_S.LOG"
+
+[ -z $SCAN_Dir ] && echo "Using : $0 Dir_Name" && exit 2
+[ -z $S_D ] && mkdir $S_D
+
+FILE_LIST(){
+  ./file_list $SCAN_Dir $file_LOG
+
+}
+
+FILE_TIME(){
+  for File in $(cat $file_LOG)
+  do
+    if [ -a $File ];then
+      echo "$(stat -c %Y $File) $File" >> $file_time_New
+    fi
+  done
+
+}
+
+
+##### main ######
+echo "$(date +%y%m%d_%H%M%S)"
+
+FILE_LIST
+
+FILE_TIME
+
+echo "$(date +%y%m%d_%H%M%S)"
