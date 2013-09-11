@@ -36,9 +36,7 @@ MD5_FILE(){
 CHECK_MD5(){
 
 Checker="/usr/bin/md5sum"
-#  if [ ! -f $file_MD5_Old ];then
-    
-    #no search "list.md5.New" exe MD5_file
+
     if [ ! -f $file_MD5_New ];then
       #echo "NO?"
       MD5_FILE
@@ -50,22 +48,15 @@ Checker="/usr/bin/md5sum"
       $Checker -c --status $CHECK_STATUS
       echo $?
     fi
-#  else  
-     
-      #MD5_FILE
-
-#  fi  
-   
-  #diff two file md5
-  #diff -u $file_MD5_New $file_MD5_Old
-  #echo "diff OK"
-    
+  
 
 }
 
 ########  MAIN  ###########
+echo "$(date +%y%m%d_%H%M%S)"
+
 FILE_LIST
-#echo "list OK"
+
 MD5_FILE
-#CHECK_MD5
-#echo "check OK"
+
+echo "$(date +%y%m%d_%H%M%S)"
