@@ -2,13 +2,15 @@
 
 
 SCAN_Dir="$1"
-file_LOG="../list.log"
-file_MD5_Old="../list.md5.old"
-file_MD5_New="../list.md5.New"
-CHECK_STATUS="../FILE_S.LOG"
-
+DATE=$(date +%y%m%d_%H%M)
+S_D='/tmp'
+file_LOG="$S_D/list.log"
+file_MD5_Old="$S_D/list.md5.old"
+file_MD5_New="$S_D/list.md5.$DATE"
+CHECK_STATUS="$S_D/FILE_S.LOG"
 
 [ -z $SCAN_Dir ] && echo "Using : $0 Dir_Name" && exit 2
+[ -z $S_D ] && mkdir $S_D
 
 #Establish file log
 FILE_LIST(){
@@ -21,9 +23,9 @@ MD5_FILE(){
   for File in $(cat $file_LOG)
   do
     if [ -a $File ];then
-      $Checker "$File"  >> ./$file_MD5_New
+      $Checker "$File"  >> $file_MD5_New
     else
-      echo "$File" >> ./$file_MD5_New
+      echo "$File" >> $file_MD5_New
     fi
   done
 
@@ -32,23 +34,30 @@ MD5_FILE(){
 
 #two file is md5 check ,if two file not the same
 CHECK_MD5(){
-  if [ ! -f $file_MD5_Old ];then
+
+Checker="/usr/bin/md5sum"
+#  if [ ! -f $file_MD5_Old ];then
     
     #no search "list.md5.New" exe MD5_file
     if [ ! -f $file_MD5_New ];then
       #echo "NO?"
       MD5_FILE
+      $Checker $file_MD5_New >> $CHECK_STATUS
       exit
+    else
+#      mv $file_MD5_New $file_MD5_Old
+#      MD5_FILE
+      $Checker -c --status $CHECK_STATUS
+      echo $?
     fi
-  else  
-      mv $file_MD5_New $file_MD5_Old
-      #echo "mv OK"
-      MD5_FILE
+#  else  
+     
+      #MD5_FILE
 
-  fi  
+#  fi  
    
   #diff two file md5
-  diff -u $file_MD5_New $file_MD5_Old
+  #diff -u $file_MD5_New $file_MD5_Old
   #echo "diff OK"
     
 
@@ -57,5 +66,6 @@ CHECK_MD5(){
 ########  MAIN  ###########
 FILE_LIST
 #echo "list OK"
-CHECK_MD5
+MD5_FILE
+#CHECK_MD5
 #echo "check OK"
